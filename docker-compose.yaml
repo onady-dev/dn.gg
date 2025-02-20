@@ -1,0 +1,35 @@
+version: '3.5' # 실행시 참고할 도커 컴포즈 문서의 버전
+
+ # services: 실행할 서비스들을 정의
+services:
+ # db: 데이터베이스(사용자 작명)
+  db:
+    image: postgres:15 # 가져올 이미지 이름 및 버전 지정
+    restart: always  # 빌드 실행 시 자동 재시작
+    environment: # 환경변수 설정
+      - POSTGRES_PASSWORD=${PG_PASSWORD}
+      - POSTGRES_USER=${PG_USERNAME}
+      - POSTGRES_DB=${PG_DATABASE}
+    container_name: postgres # 컨테이너 이름(유저 작명)
+    # volumes : 도커 이미지 내 폴더와 로컬 내 폴더를 동기화(링크 연결)
+    # 즉, 이미지 내 폴더 내 파일 변경 시 local 의 postgresql-data 내 파일도 같이 변경
+    volumes: 
+      - ./postgresql-data:/var/lib/postgresql/data
+    # 로컬 5432 로 들어오는 요청을 이미지 내 5432 포트로 포워딩
+    ports:
+      - '5432:5432' # 만일 로컬에서 5432 를 이미 쓰고 있다면 5431:5432 와 같이 로컬 포트 자체를 바꿔서 시도
+
+  # nest 프로젝트 자체
+  app:
+    build:
+      context: . # 현재 디렉토리의
+      dockerfile: Dockerfile # 도커파일 빌드
+    container_name: app
+    environment:
+      - PORT=${PORT}
+    ports:
+      - '3010:3010'
+    depends_on:
+      - db
+    volumes:
+      - ./src:/app/src
