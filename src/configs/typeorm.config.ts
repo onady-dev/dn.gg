@@ -9,5 +9,5 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   database: process.env.PG_DATABASE,
   entities: [__dirname + '/../**/*.entity.{js,ts}'],
   synchronize: true,
-  logging: false,
+  logging: true,
 };

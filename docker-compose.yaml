@@ -26,7 +26,8 @@ services:
       dockerfile: Dockerfile # 도커파일 빌드
     container_name: app
     environment:
-      - PORT=${PORT}
+      # - PORT=${PORT}
+      - CHOKIDAR_USEPOLLING=true
     ports:
       - '3010:3010'
     depends_on:

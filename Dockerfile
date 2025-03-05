@@ -27,4 +27,5 @@ EXPOSE 3010
 # dist/main.js 는 node 키워드로 실행하고자 하는 파일의 경로이다.
 # 즉, 도커 컨테이너가 실행될 때 dist/mian.js 를 같이 실행(node) 한다.
 # CMD [ "node","dist/main.js" ]
-CMD ["npm", "run", "start:local"]
+# CMD ["npm", "run", "start:dev"]
+CMD ["node", "dist/main.js"]
