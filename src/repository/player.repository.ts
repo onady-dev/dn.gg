@@ -1,0 +1,26 @@
+
+import { InjectRepository } from "@nestjs/typeorm";
+import { Player } from "src/entities/Player.entity";
+import { Repository } from "typeorm";
+
+export class PlayerRepository extends Repository<Player>{
+    constructor(
+        @InjectRepository(Player)
+        private playerRepository: Repository<Player>,
+    ) {
+        super(playerRepository.target, playerRepository.manager, playerRepository.queryRunner);
+    }
+
+    async findByGroupId(groupId: number): Promise<Player[] | null> {
+        return this.playerRepository.find({
+            where: {
+                groupId: groupId,
+            },
+        });
+    }
+
+    async savePlayer(player: Player): Promise<Player> {
+        return this.playerRepository.save(player);
+    }
+
+}
