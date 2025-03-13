@@ -16,7 +16,7 @@ export class LogRepository extends Repository<Log>{
             where: {
                 gameId,
             },
-            relations: ['logitem', 'player'],
+            relations: ['logitem', 'player', 'game'],
         });
     }
 
