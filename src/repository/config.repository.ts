@@ -10,8 +10,8 @@ export class LogitemRepository extends Repository<Logitem>{
         super(logitemRepository.target, logitemRepository.manager, logitemRepository.queryRunner);
     }
 
-    async findByGroupId(groupId: number): Promise<Logitem | null> {
-        return this.logitemRepository.findOne({
+    async findByGroupId(groupId: number): Promise<Logitem[] | null> {
+        return this.logitemRepository.find({
             where: {
                 groupId: groupId,
             },
