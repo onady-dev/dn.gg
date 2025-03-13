@@ -1,5 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { GameConnectPlayer } from "./GameConnectPlayer.entity";
+import { InGamePlayers } from "./InGamePlayers.entity";
 import { Log } from "./Log.entity";
 @Entity()
 export class Game {
@@ -9,9 +9,11 @@ export class Game {
   groupId: number;
   @Column('date')
   date: Date;
+  @Column('varchar', { length: 20 })
+  name: string;
   
-  @OneToMany(() => GameConnectPlayer, (gameConnectPlayer) => gameConnectPlayer.game)
-  gameConnectPlayers: GameConnectPlayer[];
+  @OneToMany(() => InGamePlayers, (inGamePlayers) => inGamePlayers.game)
+  inGamePlayers: InGamePlayers[];
   @OneToMany(() => Log, (log) => log.game)
   logs: Log[];
 }

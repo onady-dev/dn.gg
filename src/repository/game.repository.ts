@@ -11,22 +11,19 @@ export class GameRepository extends Repository<Game>{
         super(gameRepository.target, gameRepository.manager, gameRepository.queryRunner);
     }
 
-    async findByGroupId(groupId: number): Promise<Game | null> {
-        return this.gameRepository.findOne({
-            where: {
-                groupId,
-            },
-        });
+    async findByGroupId(groupId: number): Promise<Game[] | null> {
+        return this.gameRepository.createQueryBuilder('game')
+            .where('game."groupId" = :groupId', { groupId })
+            .getMany();
     }
 
     async findById(id: number): Promise<Game | null> {
-        return this.gameRepository.createQueryBuilder('game')
-            .leftJoinAndSelect('game.gameConnectPlayers', 'gameConnectPlayers')
-            .leftJoinAndSelect('gameConnectPlayers.player', 'player')
-            .leftJoinAndSelect('game.logs', 'logs')
-            .leftJoinAndSelect('logs.logitem', 'logitem')
-            .where('game.id = :id', { id })
-            .getOne();
+        return this.gameRepository.findOne({
+            where: {
+                id,
+            },
+            relations: ['inGamePlayers', 'logs'],
+        });
     }
 
     async saveGame(game: Game, queryRunner: QueryRunner): Promise<Game> {

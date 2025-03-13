@@ -11,11 +11,6 @@ export class GameController {
         return this.gameService.getGames(groupId);
     }
 
-    @Get(':id')
-    async getGameById(@Param('id') id: number) {
-        return this.gameService.getGameById(id);
-    }
-
     @Post()
     async saveGame(@Body(ValidationPipe) dto: PostGameRequestDto) {
         return this.gameService.saveGame(dto);

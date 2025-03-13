@@ -9,8 +9,8 @@ import { GameService } from "./game.service";
 import { GameController } from "./game.controller";
 import { Logitem } from "src/entities/Logitem.entity";
 import { Log } from "src/entities/Log.entity";
-import { GameConnectPlayer } from "src/entities/GameConnectPlayer.entity";
-import { GameConnectPlayerRepository } from "src/repository/gameConnectPlayer.repository";
+import { InGamePlayers } from "src/entities/InGamePlayers.entity";
+import { InGamePlayersRepository } from "src/repository/inGamePlayers.repository";
 import { LogRepository } from "src/repository/log.repository";
 
 @Module({
@@ -24,12 +24,12 @@ import { LogRepository } from "src/repository/log.repository";
         Logitem,
         Player,
         Group,
-        GameConnectPlayer,
+        InGamePlayers,
         Log,
     ]),
   ],
   controllers: [GameController],
-  providers: [GameService, GameRepository, GameConnectPlayerRepository, LogRepository],
+  providers: [GameService, GameRepository, InGamePlayersRepository, LogRepository],
 })
 export class GameModule {}
 

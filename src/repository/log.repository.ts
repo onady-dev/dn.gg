@@ -11,11 +11,21 @@ export class LogRepository extends Repository<Log>{
         super(logRepository.target, logRepository.manager, logRepository.queryRunner);
     }
 
-    async findByGroupId(groupId: number): Promise<Log | null> {
-        return this.logRepository.findOne({
+    async findLogsByGameId(gameId: number): Promise<Log[] | null> {
+        return this.logRepository.find({
+            where: {
+                gameId,
+            },
+            relations: ['logitem', 'player'],
+        });
+    }
+
+    async findByGroupId(groupId: number): Promise<Log[] | null> {
+        return this.logRepository.find({
             where: {
                 groupId,
             },
+            relations: ['logitem', 'player'],
         });
     }
 
@@ -27,11 +37,12 @@ export class LogRepository extends Repository<Log>{
         });
     }
 
-    async findByPlayerId(playerId: number): Promise<Log | null> {
-        return this.logRepository.findOne({
+    async findByPlayerId(playerId: number): Promise<Log[] | null> {
+        return this.logRepository.find({
             where: {
                 playerId,
             },
+            relations: ['logitem', 'player', 'game'],
         });
     }
 

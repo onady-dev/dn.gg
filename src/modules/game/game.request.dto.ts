@@ -1,9 +1,15 @@
 import { IsArray, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 
 export class PostGameRequestDto {
+    @IsOptional()
+    @IsNumber()
+    id: number;
     @IsNotEmpty()
     @IsNumber()
     groupId: number;
+    @IsNotEmpty()
+    @IsString()
+    name: string;
     @IsNotEmpty()
     @IsArray()
     homePlayers: HomePlayer[];

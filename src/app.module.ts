@@ -9,6 +9,7 @@ import { LogitemModule } from './modules/logitem/logitem.module';
 import { PlayerModule } from './modules/player/player.module';
 import { APP_FILTER } from '@nestjs/core';
 import { HttpExceptionFilter } from './httpExceptionFilter';
+import { LogModule } from './modules/log/log.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -34,6 +35,7 @@ import { HttpExceptionFilter } from './httpExceptionFilter';
     GameModule,
     LogitemModule,
     PlayerModule,
+    LogModule,
   ],
   controllers: [],
   providers: [    

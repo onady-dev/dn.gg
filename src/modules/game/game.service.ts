@@ -4,8 +4,8 @@ import { GameRepository } from "src/repository/game.repository";
 import { PostGameRequestDto } from "./game.request.dto";
 import { Game } from "src/entities/Game.entity";
 import { DataSource } from "typeorm";
-import { GameConnectPlayer } from "src/entities/GameConnectPlayer.entity";
-import { GameConnectPlayerRepository } from "src/repository/gameConnectPlayer.repository";
+import { InGamePlayers } from "src/entities/InGamePlayers.entity";
+import { InGamePlayersRepository } from "src/repository/inGamePlayers.repository";
 import { Log } from "src/entities/Log.entity";
 import { LogRepository } from "src/repository/log.repository";
 
@@ -13,13 +13,29 @@ import { LogRepository } from "src/repository/log.repository";
 export class GameService {
     constructor(
         private readonly gameRepository: GameRepository,
-        private readonly gameConnectPlayerRepository: GameConnectPlayerRepository,
+        private readonly inGamePlayersRepository: InGamePlayersRepository,
         private readonly logRepository: LogRepository,
         private dataSource: DataSource
     ) {}
 
     async getGames(groupId: number) {
-        return this.gameRepository.findByGroupId(groupId);
+        const games: Game[] | null = await this.gameRepository.findByGroupId(groupId);
+        if (!games) return [];
+        const gameInfo = games.map(async (game: Game) => {
+            const homePlayers = await this.inGamePlayersRepository.findPlayers(groupId, game.id, 'home');
+            const awayPlayers = await this.inGamePlayersRepository.findPlayers(groupId, game.id, 'away');
+            const logs = await this.logRepository.findLogsByGameId(game.id);
+            return {
+                id: game.id,
+                date: game.date,
+                name: game.name,
+                homePlayers: homePlayers,
+                awayPlayers: awayPlayers,
+                logs: logs,
+            }
+        })
+        const result = await Promise.all(gameInfo);
+        return result;
     }
 
     async getGameById(id: number) {
@@ -31,19 +47,19 @@ export class GameService {
         await queryRunner.connect();
         await queryRunner.startTransaction();
         try {
-            const {groupId, homePlayers, awayPlayers, logs} = dto;
-            const gameInstance = plainToInstance(Game, {groupId, date: new Date()});
+            const {id, groupId, homePlayers, awayPlayers, logs} = dto;
+            const gameInstance = plainToInstance(Game, {id, groupId, date: new Date()});
             const {id: gameId} = await this.gameRepository.saveGame(gameInstance, queryRunner);
 
-            const emptyGameConnectPlayer = this.gameConnectPlayerRepository.emptyGameConnectPlayer(groupId, gameId, queryRunner);
+            const emptyGameConnectPlayer = this.inGamePlayersRepository.emptyInGamePlayers(groupId, gameId, queryRunner);
             const emptyLog = this.logRepository.emptyLog(groupId, gameId, queryRunner);
             const saveHomePlayers = homePlayers.map(({id: playerId}) => {
-                const gcpInstance = plainToInstance(GameConnectPlayer, {groupId, gameId, playerId, team: 'home'});
-                return this.gameConnectPlayerRepository.saveGameConnectPlayer(gcpInstance, queryRunner);
+                const gcpInstance = plainToInstance(InGamePlayers, {groupId, gameId, playerId, team: 'home'});
+                return this.inGamePlayersRepository.saveInGamePlayers(gcpInstance, queryRunner);
             })
             const saveAwayPlayers = awayPlayers.map(({id: playerId}) => {
-                const gcpInstance = plainToInstance(GameConnectPlayer, {groupId, gameId, playerId, team: 'away'});
-                return this.gameConnectPlayerRepository.saveGameConnectPlayer(gcpInstance, queryRunner);
+                const gcpInstance = plainToInstance(InGamePlayers, {groupId, gameId, playerId, team: 'away'});
+                return this.inGamePlayersRepository.saveInGamePlayers(gcpInstance, queryRunner);
             })
             const saveLogs = logs.map(({playerId, logitemId}) => {
                 const logInstance = plainToInstance(Log, {groupId, gameId, playerId, logitemId});
