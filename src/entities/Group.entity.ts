@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
 @Entity()
+@Unique(['name'])
 export class Group {
   @PrimaryGeneratedColumn()
   id: number;
@@ -7,4 +8,3 @@ export class Group {
   @Column('varchar', { length: 20 })
   name: string;
 }
-
