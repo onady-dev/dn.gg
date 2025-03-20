@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Query, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Query, ValidationPipe } from "@nestjs/common";
 import { GameService } from "./game.service";
 import { PostGameRequestDto } from "./game.request.dto";
 
@@ -14,5 +14,10 @@ export class GameController {
     @Post()
     async saveGame(@Body(ValidationPipe) dto: PostGameRequestDto) {
         return this.gameService.saveGame(dto);
+    }
+
+    @Delete(':id')
+    async deleteGame(@Param('id') id: number) {
+        return this.gameService.deleteGame(id);
     }
 }

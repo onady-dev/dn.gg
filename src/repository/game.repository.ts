@@ -29,4 +29,8 @@ export class GameRepository extends Repository<Game>{
     async saveGame(game: Game, queryRunner: QueryRunner): Promise<Game> {
         return queryRunner.manager.save(Game, game);
     }
+
+    async deleteGame(id: number) {
+        return this.gameRepository.delete(id);
+    }
 }

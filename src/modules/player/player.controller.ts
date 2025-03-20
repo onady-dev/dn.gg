@@ -2,9 +2,11 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
+  Put,
   Query,
   ValidationPipe,
 } from '@nestjs/common';
@@ -28,5 +30,15 @@ export class PlayerController {
       }
       throw error;
     });
+  }
+
+  @Put(':id')
+  async updatePlayer(@Param('id') id: number, @Body(ValidationPipe) dto: PostPlayerRequestDto) {
+    return this.playerService.updatePlayer(id, dto);
+  }
+
+  @Delete(':id')
+  async deletePlayer(@Param('id') id: number) {
+    return this.playerService.deletePlayer(id);
   }
 }

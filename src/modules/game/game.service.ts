@@ -129,4 +129,8 @@ export class GameService {
       await queryRunner.release();
     }
   }
+
+  async deleteGame(id: number) {
+    return this.gameRepository.deleteGame(id);
+  }
 }

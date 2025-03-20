@@ -19,5 +19,14 @@ export class PlayerService {
         const playerInstance = plainToInstance(Player, {...dto});
         return this.playerRepository.savePlayer(playerInstance);
     }
+
+    async updatePlayer(id: number, dto: PostPlayerRequestDto) {
+        const playerInstance = plainToInstance(Player, {...dto});
+        return this.playerRepository.updatePlayer(id, playerInstance);
+    }
+
+    async deletePlayer(id: number) {
+        return this.playerRepository.deletePlayer(id);
+    }
 }
 

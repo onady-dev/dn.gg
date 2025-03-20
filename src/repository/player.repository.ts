@@ -23,4 +23,12 @@ export class PlayerRepository extends Repository<Player>{
         return this.playerRepository.save(player);
     }
 
+    async updatePlayer(id: number, player: Player) {
+        return this.playerRepository.update(id, player);
+    }
+
+    async deletePlayer(id: number) {
+        return this.playerRepository.delete(id);
+    }
+
 }
