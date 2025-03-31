@@ -18,7 +18,7 @@ import { LogModule } from './modules/log/log.module';
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
+      host: 'db',
       port: 5432,
       username: 'postgres',
       password: 'postgres',
