@@ -14,15 +14,15 @@ import { LogModule } from './modules/log/log.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true, // true 지정 시 다른 모듈에서 import 하지 않고 바로 사용 가능
-      envFilePath: ".env", // 접근 가능한 환경변수 목록
+      envFilePath: '.env', // 접근 가능한 환경변수 목록
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'db',
-      port: 5432,
-      username: 'postgres',
-      password: 'postgres',
-      database: 'dngg',
+      host: process.env.DB_HOST,
+      port: Number(process.env.DB_PORT),
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_DATABASE,
       entities: ['dist/entities/*.entity.js'],
       autoLoadEntities: true,
       synchronize: true,
@@ -38,7 +38,7 @@ import { LogModule } from './modules/log/log.module';
     LogModule,
   ],
   controllers: [],
-  providers: [    
+  providers: [
     // {
     //   provide: APP_FILTER,
     //   useClass: HttpExceptionFilter,
