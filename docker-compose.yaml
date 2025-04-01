@@ -17,7 +17,7 @@ services:
     # 즉, 이미지 내 폴더 내 파일 변경 시 local 의 postgresql-data 내 파일도 같이 변경
     volumes:
       - ./postgresql.conf:/etc/postgresql.conf
-      - ./postgresql-data:/var/lib/postgresql/data
+      - ./pg-data:/var/lib/postgresql/data
     # 로컬 5432 로 들어오는 요청을 이미지 내 5432 포트로 포워딩
     ports:
       - '5432:5432' # 만일 로컬에서 5432 를 이미 쓰고 있다면 5431:5432 와 같이 로컬 포트 자체를 바꿔서 시도
