@@ -33,12 +33,18 @@ export class PlayerController {
   }
 
   @Put(':id')
-  async updatePlayer(@Param('id') id: number, @Body(ValidationPipe) dto: PostPlayerRequestDto) {
+  async updatePlayer(
+    @Param('id') id: number,
+    @Body(ValidationPipe) dto: PostPlayerRequestDto,
+  ) {
     return this.playerService.updatePlayer(id, dto);
   }
 
   @Delete(':id')
-  async deletePlayer(@Param('id') id: number) {
-    return this.playerService.deletePlayer(id);
+  async deletePlayer(
+    @Param('id') id: number,
+    @Query('groupId') groupId: number,
+  ) {
+    return this.playerService.deletePlayer(id, groupId);
   }
 }
