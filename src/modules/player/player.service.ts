@@ -15,18 +15,15 @@ export class PlayerService {
 
   async createPlayer(dto: PostPlayerRequestDto) {
     const playerInstance = plainToInstance(Player, { ...dto });
-    await this.playerRepository.savePlayer(playerInstance);
-    return this.playerRepository.findByGroupId(dto.groupId);
+    return await this.playerRepository.savePlayer(playerInstance);
   }
 
   async updatePlayer(id: number, dto: PostPlayerRequestDto) {
     const playerInstance = plainToInstance(Player, { ...dto });
-    await this.playerRepository.updatePlayer(id, playerInstance);
-    return this.playerRepository.findByGroupId(dto.groupId);
+    return await this.playerRepository.updatePlayer(id, playerInstance);
   }
 
   async deletePlayer(id: number, groupId: number) {
-    await this.playerRepository.deletePlayer(id);
-    return this.playerRepository.findByGroupId(groupId);
+    return await this.playerRepository.deletePlayer(id);
   }
 }

@@ -1,7 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { GameRepository } from 'src/repository/game.repository';
-import { PostGameRequestDto } from './game.request.dto';
+import {
+  PostGameAndLogsRequestDto,
+  PostGameRequestDto,
+} from './game.request.dto';
 import { Game } from 'src/entities/Game.entity';
 import { DataSource } from 'typeorm';
 import { InGamePlayers } from 'src/entities/InGamePlayers.entity';
@@ -51,7 +54,20 @@ export class GameService {
     return this.gameRepository.findById(id);
   }
 
-  async saveGame(dto: PostGameRequestDto) {
+  // async saveGame(dto: PostGameRequestDto) {
+  //   const gameInstance = plainToInstance(Game, {
+  //     groupId: dto.groupId,
+  //     date: new Date(),
+  //     name: dto.name,
+  //   });
+  //   return this.gameRepository.saveGame(gameInstance);
+  // }
+
+  async deleteGame(id: number) {
+    return this.gameRepository.deleteGame(id);
+  }
+
+  async saveGameAndLogs(dto: PostGameAndLogsRequestDto) {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
@@ -121,16 +137,12 @@ export class GameService {
       ]);
 
       await queryRunner.commitTransaction();
-      return;
+      return { gameId };
     } catch (error) {
       await queryRunner.rollbackTransaction();
       throw error;
     } finally {
       await queryRunner.release();
     }
-  }
-
-  async deleteGame(id: number) {
-    return this.gameRepository.deleteGame(id);
   }
 }

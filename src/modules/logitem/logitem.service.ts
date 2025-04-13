@@ -10,12 +10,6 @@ export class LogitemService {
 
   async getLogitemByGroupId(groupId: number) {
     const result = await this.logitemRepository.findByGroupId(groupId);
-    const map = new Map();
-    if (result) {
-      result.forEach((item, index) => {
-        map.set(item.id, { name: item.name, value: item.value });
-      });
-    }
     return result;
   }
 
