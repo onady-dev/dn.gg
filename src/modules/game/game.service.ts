@@ -41,8 +41,16 @@ export class GameService {
         id: game.id,
         date: game.date,
         name: game.name,
-        homePlayers: homePlayers,
-        awayPlayers: awayPlayers,
+        homePlayers: homePlayers?.map((player) => ({
+          id: player.playerId,
+          name: player.player.name,
+          team: player.team,
+        })),
+        awayPlayers: awayPlayers?.map((player) => ({
+          id: player.playerId,
+          name: player.player.name,
+          team: player.team,
+        })),
         logs: logs,
       };
     });
