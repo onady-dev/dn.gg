@@ -13,6 +13,10 @@ export class PlayerService {
     return this.playerRepository.findByGroupId(groupId);
   }
 
+  async getPlayerByPlayerId(id: number) {
+    return this.playerRepository.findById(id);
+  }
+
   async createPlayer(dto: PostPlayerRequestDto) {
     const playerInstance = plainToInstance(Player, { ...dto });
     return await this.playerRepository.savePlayer(playerInstance);

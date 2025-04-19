@@ -1,23 +1,30 @@
-import { Controller, Get, Param, Query } from "@nestjs/common";
-import { LogService } from "./log.service";
+import { Controller, Get, Param, Query } from '@nestjs/common';
+import { LogService } from './log.service';
 
 @Controller('log')
 export class LogController {
-    constructor(private readonly logService: LogService) {}
+  constructor(private readonly logService: LogService) {}
 
-    @Get()
-    async getLogByGroupId(@Query('groupId') groupId: number) {
-        return this.logService.getLogByGroupId(groupId);
-    }
+  @Get()
+  async getLogByGroupId(@Query('groupId') groupId: number) {
+    return this.logService.getLogByGroupId(groupId);
+  }
 
-    @Get('/game/:id')
-    async getLogByGameId(@Param('id') id: number) {
-        return this.logService.getLogByGameId(id);
-    }
+  @Get('/game/:id')
+  async getLogByGameId(@Param('id') id: number) {
+    return this.logService.getLogByGameId(id);
+  }
 
-    @Get('/player/:id')
-    async getLogByPlayerId(@Param('id') id: number) {
-        return this.logService.getLogByPlayerId(id);
-    }
+  @Get('/player/:id')
+  async getLogByPlayerId(@Param('id') id: number) {
+    return this.logService.getLogByPlayerId(id);
+  }
 
+  @Get('/logitem')
+  async getLogByLogId(
+    @Query('groupId') groupId: number,
+    @Query('logitemId') logitemId: number,
+  ) {
+    return this.logService.getLogByLogItemIdAndGroupId(logitemId, groupId);
+  }
 }

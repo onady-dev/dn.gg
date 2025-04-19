@@ -22,6 +22,11 @@ export class PlayerController {
     return this.playerService.getPlayerByGroupId(groupId);
   }
 
+  @Get(':id')
+  async getPlayerByPlayerId(@Param('id') id: number) {
+    return this.playerService.getPlayerByPlayerId(id);
+  }
+
   @Post()
   async createPlayer(@Body(ValidationPipe) dto: PostPlayerRequestDto) {
     return this.playerService.createPlayer(dto).catch((error) => {

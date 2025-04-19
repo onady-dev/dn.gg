@@ -1,64 +1,84 @@
+import { InjectRepository } from '@nestjs/typeorm';
+import { Log } from 'src/entities/Log.entity';
+import { QueryRunner, Repository } from 'typeorm';
 
-import { InjectRepository } from "@nestjs/typeorm";
-import { Log } from "src/entities/Log.entity";
-import { QueryRunner, Repository } from "typeorm";
+export class LogRepository extends Repository<Log> {
+  constructor(
+    @InjectRepository(Log)
+    private logRepository: Repository<Log>,
+  ) {
+    super(
+      logRepository.target,
+      logRepository.manager,
+      logRepository.queryRunner,
+    );
+  }
 
-export class LogRepository extends Repository<Log>{
-    constructor(
-        @InjectRepository(Log)
-        private logRepository: Repository<Log>,
-    ) {
-        super(logRepository.target, logRepository.manager, logRepository.queryRunner);
-    }
+  async findLogsByGameId(gameId: number): Promise<Log[] | null> {
+    return this.logRepository.find({
+      where: {
+        gameId,
+      },
+      relations: ['logitem', 'player', 'game'],
+    });
+  }
 
-    async findLogsByGameId(gameId: number): Promise<Log[] | null> {
-        return this.logRepository.find({
-            where: {
-                gameId,
-            },
-            relations: ['logitem', 'player', 'game'],
-        });
-    }
+  async findByGroupId(groupId: number): Promise<Log[] | null> {
+    return this.logRepository.find({
+      where: {
+        groupId,
+      },
+      relations: ['logitem', 'player'],
+    });
+  }
 
-    async findByGroupId(groupId: number): Promise<Log[] | null> {
-        return this.logRepository.find({
-            where: {
-                groupId,
-            },
-            relations: ['logitem', 'player'],
-        });
-    }
+  async findByGameId(gameId: number): Promise<Log | null> {
+    return this.logRepository.findOne({
+      where: {
+        gameId,
+      },
+    });
+  }
 
-    async findByGameId(gameId: number): Promise<Log | null> {
-        return this.logRepository.findOne({
-            where: {
-                gameId,
-            },
-        });
-    }
+  async findByPlayerId(playerId: number): Promise<Log[] | null> {
+    return this.logRepository.find({
+      where: {
+        playerId,
+      },
+      relations: ['logitem', 'player', 'game'],
+    });
+  }
 
-    async findByPlayerId(playerId: number): Promise<Log[] | null> {
-        return this.logRepository.find({
-            where: {
-                playerId,
-            },
-            relations: ['logitem', 'player', 'game'],
-        });
-    }
+  async findByLogitemId(logitemId: number): Promise<Log | null> {
+    return this.logRepository.findOne({
+      where: {
+        logitemId,
+      },
+    });
+  }
 
-    async findByLogitemId(logitemId: number): Promise<Log | null> {
-        return this.logRepository.findOne({
-            where: {
-                logitemId,
-            },
-        });
-    }
-    
-    async emptyLog(groupId: number, gameId: number, queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.manager.delete(Log, { groupId, gameId });
-    }
+  async emptyLog(
+    groupId: number,
+    gameId: number,
+    queryRunner: QueryRunner,
+  ): Promise<void> {
+    await queryRunner.manager.delete(Log, { groupId, gameId });
+  }
 
-    async saveLog(log: Log, queryRunner: QueryRunner): Promise<Log> {
-        return queryRunner.manager.save(Log, log);
-    }
+  async saveLog(log: Log, queryRunner: QueryRunner): Promise<Log> {
+    return queryRunner.manager.save(Log, log);
+  }
+
+  async findByLogItemIdAndGroupId(
+    logitemId: number,
+    groupId: number,
+  ): Promise<Log[] | null> {
+    return this.logRepository.find({
+      where: {
+        logitemId,
+        groupId,
+      },
+      relations: ['logitem', 'player', 'game'],
+    });
+  }
 }
