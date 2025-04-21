@@ -7,9 +7,11 @@ async function bootstrap() {
     bufferLogs: true,
   });
   app.enableCors({
-    origin: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    origin: ['http://52.79.243.216:3000'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
     credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
+    exposedHeaders: ['Authorization'],
   });
   app.useGlobalPipes(
     new ValidationPipe({
