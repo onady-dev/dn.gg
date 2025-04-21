@@ -20,6 +20,6 @@ async function bootstrap() {
       transform: true, // 컨트롤러가 값을 받을때 컨트롤러에 정의한 타입으로 형변환
     }),
   );
-  await app.listen(process.env.PORT || 4000);
+  await app.listen(process.env.PORT || 3010);
 }
 bootstrap();
