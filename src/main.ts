@@ -6,7 +6,11 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     bufferLogs: true,
   });
-  app.enableCors();
+  app.enableCors({
+    origin: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    credentials: true,
+  });
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true, // 엔티티 데코레이터에 없는 프로퍼티 값은 무조건 거름
@@ -14,6 +18,6 @@ async function bootstrap() {
       transform: true, // 컨트롤러가 값을 받을때 컨트롤러에 정의한 타입으로 형변환
     }),
   );
-  await app.listen(process.env.PORT || 3010);
+  await app.listen(process.env.PORT || 4000);
 }
 bootstrap();
