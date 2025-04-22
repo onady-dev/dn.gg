@@ -52,4 +52,9 @@ export class PlayerController {
   ) {
     return this.playerService.deletePlayer(id, groupId);
   }
+
+  @Get('total-games-played/:id')
+  async getTotalGamesPlayed(@Param('id') id: number) {
+    return this.playerService.getTotalGamesPlayed(id);
+  }
 }

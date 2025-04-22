@@ -30,4 +30,8 @@ export class PlayerService {
   async deletePlayer(id: number, groupId: number) {
     return await this.playerRepository.deletePlayer(id);
   }
+
+  async getTotalGamesPlayed(id: number) {
+    return await this.playerRepository.getTotalGamesPlayed(id);
+  }
 }
