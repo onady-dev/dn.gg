@@ -7,7 +7,7 @@ async function bootstrap() {
     bufferLogs: true,
   });
   app.enableCors({
-    origin: ['http://52.79.243.216:3000', 'http://localhost:3011'],
+    origin: ['https://dngg.shop'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
