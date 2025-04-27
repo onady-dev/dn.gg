@@ -40,12 +40,4 @@ export class PlayerRepository extends Repository<Player> {
   async deletePlayer(id: number) {
     return this.playerRepository.delete(id);
   }
-
-  async getTotalGamesPlayed(id: number) {
-    return this.playerRepository.query(`
-      SELECT COUNT(*) as total_games_played
-      FROM in_game_players igp
-      WHERE igp.player_id = ${id}
-    `);
-  }
 }

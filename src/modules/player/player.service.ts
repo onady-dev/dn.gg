@@ -4,10 +4,14 @@ import { PostPlayerRequestDto } from './player.request.dto';
 import { PlayerRepository } from 'src/repository/player.repository';
 import { Player } from 'src/entities/Player.entity';
 import { QueryFailedError } from 'typeorm';
+import { InGamePlayersRepository } from 'src/repository/inGamePlayers.repository';
 
 @Injectable()
 export class PlayerService {
-  constructor(private readonly playerRepository: PlayerRepository) {}
+  constructor(
+    private readonly playerRepository: PlayerRepository,
+    private readonly inGamePlayersRepository: InGamePlayersRepository,
+  ) {}
 
   async getPlayerByGroupId(groupId: number) {
     return this.playerRepository.findByGroupId(groupId);
@@ -32,6 +36,8 @@ export class PlayerService {
   }
 
   async getTotalGamesPlayed(id: number) {
-    return await this.playerRepository.getTotalGamesPlayed(id);
+    const test = await this.inGamePlayersRepository.getTotalGamesPlayed(id);
+    console.log(id);
+    return test;
   }
 }

@@ -10,6 +10,10 @@ import { PlayerModule } from './modules/player/player.module';
 import { APP_FILTER } from '@nestjs/core';
 import { HttpExceptionFilter } from './httpExceptionFilter';
 import { LogModule } from './modules/log/log.module';
+import * as winston from 'winston';
+
+const { combine, timestamp, printf, colorize } = winston.format;
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -26,10 +30,29 @@ import { LogModule } from './modules/log/log.module';
       entities: ['dist/entities/*.entity.js'],
       autoLoadEntities: true,
       synchronize: true,
-      logging: false,
+      logging: true,
     }),
     WinstonModule.forRoot({
-      level: 'info',
+      transports: [
+        new winston.transports.Console({
+          format: combine(
+            timestamp({
+              format: 'YYYY-MM-DD HH:mm:ss.SSS',
+            }),
+            colorize(),
+            printf(({ timestamp, level, message, context, trace }) => {
+              const messageStr =
+                typeof message === 'object'
+                  ? JSON.stringify(message, null, 2)
+                  : message;
+              const contextStr = context ? `[${context}] ` : '';
+              const traceStr = trace ? `\n${trace}` : '';
+              return `${timestamp} [${level}] ${contextStr}${messageStr}${traceStr}`;
+            }),
+          ),
+        }),
+      ],
+      level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
     }),
     GroupModule,
     GameModule,
@@ -39,10 +62,10 @@ import { LogModule } from './modules/log/log.module';
   ],
   controllers: [],
   providers: [
-    // {
-    //   provide: APP_FILTER,
-    //   useClass: HttpExceptionFilter,
-    // },
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
+    },
   ],
 })
 export class AppModule implements NestModule {
