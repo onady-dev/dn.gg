@@ -24,6 +24,11 @@ export class GameController {
     return this.gameService.getGames(groupId);
   }
 
+  @Get(':id')
+  async getGameById(@Param('id') id: number) {
+    return this.gameService.getGameById(id);
+  }
+
   @Patch(':id')
   async updateGameStatus(@Param('id') id: number, @Body('status') status: string) {
     return this.gameService.updateGameStatus(id, status);

@@ -64,7 +64,20 @@ export class GameService {
   }
 
   async getGameById(id: number) {
-    return this.gameRepository.findById(id);
+    const game = await this.gameRepository.findById(id);
+    if (!game) {
+      throw new Error('게임을 찾을 수 없습니다.');
+    }
+    return {
+      groupId: game.groupId,
+      id: game.id,
+      date: game.date,
+      name: game.name,
+      homePlayers: game.inGamePlayers.filter(player => player.team === 'home'),
+      awayPlayers: game.inGamePlayers.filter(player => player.team === 'away'),
+      logs: game.logs,
+      status: game.status,
+    };
   }
 
   async deleteGame(id: number) {
