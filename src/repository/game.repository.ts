@@ -22,7 +22,7 @@ export class GameRepository extends Repository<Game>{
             where: {
                 id,
             },
-            relations: ['inGamePlayers', 'logs'],
+            relations: ['inGamePlayers', 'logs', 'inGamePlayers.player'],
         });
     }
 

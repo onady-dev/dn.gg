@@ -73,8 +73,8 @@ export class GameService {
       id: game.id,
       date: game.date,
       name: game.name,
-      homePlayers: game.inGamePlayers.filter(player => player.team === 'home'),
-      awayPlayers: game.inGamePlayers.filter(player => player.team === 'away'),
+      homePlayers: game.inGamePlayers.filter(player => player.team === 'home').map(player => player.player),
+      awayPlayers: game.inGamePlayers.filter(player => player.team === 'away').map(player => player.player),
       logs: game.logs,
       status: game.status,
     };
