@@ -1,16 +1,16 @@
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsNotEmpty, IsNumber, IsString } from "class-validator";
 
 export class PostLogRequestDto {
     @IsNotEmpty()
-    @IsString()
-    groupId: string;
+    @IsNumber()
+    groupId: number;
     @IsNotEmpty()
-    @IsString()
-    gameId: string;
+    @IsNumber()
+    gameId: number;
     @IsNotEmpty()
-    @IsString()
-    playerId: string;
+    @IsNumber()
+    playerId: number;
     @IsNotEmpty()
-    @IsString()
-    logitemId: string;
+    @IsNumber()
+    logitemId: number;
 }

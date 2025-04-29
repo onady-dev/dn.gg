@@ -81,4 +81,8 @@ export class LogRepository extends Repository<Log> {
       relations: ['logitem', 'player', 'game'],
     });
   }
+
+  async createLog(log: Log) {
+    return this.logRepository.save(log);
+  }
 }

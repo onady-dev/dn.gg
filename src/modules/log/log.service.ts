@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { LogRepository } from 'src/repository/log.repository';
+import { PostLogRequestDto } from './log.request.dto';
+import { plainToInstance } from 'class-transformer';
+import { Log } from 'src/entities/Log.entity';
 
 @Injectable()
 export class LogService {
@@ -23,5 +26,10 @@ export class LogService {
 
   async getLogByLogItemIdAndGroupId(logitemId: number, groupId: number) {
     return this.logRepository.findByLogItemIdAndGroupId(logitemId, groupId);
+  }
+
+  async createLog(log: PostLogRequestDto) {
+    const logInstance = plainToInstance(Log, log);
+    return this.logRepository.createLog(logInstance);
   }
 }

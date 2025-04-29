@@ -1,5 +1,6 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, ValidationPipe } from '@nestjs/common';
 import { LogService } from './log.service';
+import { PostLogRequestDto } from './log.request.dto';
 
 @Controller('log')
 export class LogController {
@@ -26,5 +27,10 @@ export class LogController {
     @Query('logitemId') logitemId: number,
   ) {
     return this.logService.getLogByLogItemIdAndGroupId(logitemId, groupId);
+  }
+
+  @Post()
+  async createLog(@Body(ValidationPipe) log: PostLogRequestDto) {
+    return this.logService.createLog(log);
   }
 }
