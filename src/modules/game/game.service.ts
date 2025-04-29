@@ -7,7 +7,7 @@ import {
 } from './game.request.dto';
 import { Game } from 'src/entities/Game.entity';
 import { DataSource } from 'typeorm';
-import { InGamePlayers } from 'src/entities/InGamePlayers.entity';
+import { InGamePlayer } from 'src/entities/InGamePlayer.entity';
 import { InGamePlayersRepository } from 'src/repository/inGamePlayers.repository';
 import { Log } from 'src/entities/Log.entity';
 import { LogRepository } from 'src/repository/log.repository';
@@ -52,24 +52,20 @@ export class GameService {
           team: player.team,
         })),
         logs: logs,
+        status: game.status,
       };
     });
     const result = await Promise.all(gameInfo);
     return result;
   }
 
+  async updateGameStatus(id: number, status: string) {
+    return this.gameRepository.updateGameStatus(id, status);
+  }
+
   async getGameById(id: number) {
     return this.gameRepository.findById(id);
   }
-
-  // async saveGame(dto: PostGameRequestDto) {
-  //   const gameInstance = plainToInstance(Game, {
-  //     groupId: dto.groupId,
-  //     date: new Date(),
-  //     name: dto.name,
-  //   });
-  //   return this.gameRepository.saveGame(gameInstance);
-  // }
 
   async deleteGame(id: number) {
     return this.gameRepository.deleteGame(id);
@@ -87,62 +83,75 @@ export class GameService {
         date: new Date(),
         name,
       });
+      
+      // 게임 저장
       const { id: gameId } = await this.gameRepository.saveGame(
         gameInstance,
         queryRunner,
       );
 
-      const emptyGameConnectPlayer =
-        this.inGamePlayersRepository.emptyInGamePlayers(
-          groupId,
-          gameId,
-          queryRunner,
-        );
-      const emptyLog = this.logRepository.emptyLog(
+      // 게임이 실제로 저장되었는지 확인
+      const savedGame = await queryRunner.manager
+        .getRepository(Game)
+        .findOne({ where: { id: gameId } });
+      if (!savedGame) {
+        throw new Error('게임 저장에 실패했습니다.');
+      }
+
+      // 이후 작업 진행
+      const emptyGameConnectPlayer = await this.inGamePlayersRepository.emptyInGamePlayers(
         groupId,
         gameId,
         queryRunner,
       );
-      const saveHomePlayers = homePlayers.map(({ id: playerId }) => {
-        const gcpInstance = plainToInstance(InGamePlayers, {
+
+      const emptyLog = await this.logRepository.emptyLog(
+        groupId,
+        gameId,
+        queryRunner,
+      );
+
+      // 기존 데이터 삭제가 완료된 후에 새 데이터 삽입
+      await Promise.all([emptyGameConnectPlayer, emptyLog]);
+
+      // 홈 플레이어 저장
+      for (const { id: playerId } of homePlayers) {
+        const gcpInstance = plainToInstance(InGamePlayer, {
           groupId,
           gameId,
           playerId,
           team: 'home',
         });
-        return this.inGamePlayersRepository.saveInGamePlayers(
+        await this.inGamePlayersRepository.saveInGamePlayers(
           gcpInstance,
           queryRunner,
         );
-      });
-      const saveAwayPlayers = awayPlayers.map(({ id: playerId }) => {
-        const gcpInstance = plainToInstance(InGamePlayers, {
+      }
+
+      // 어웨이 플레이어 저장
+      for (const { id: playerId } of awayPlayers) {
+        const gcpInstance = plainToInstance(InGamePlayer, {
           groupId,
           gameId,
           playerId,
           team: 'away',
         });
-        return this.inGamePlayersRepository.saveInGamePlayers(
+        await this.inGamePlayersRepository.saveInGamePlayers(
           gcpInstance,
           queryRunner,
         );
-      });
-      const saveLogs = logs.map(({ playerId, logitemId }) => {
+      }
+
+      // 로그 저장
+      for (const { playerId, logitemId } of logs) {
         const logInstance = plainToInstance(Log, {
           groupId,
           gameId,
           playerId,
           logitemId,
         });
-        return this.logRepository.saveLog(logInstance, queryRunner);
-      });
-      await Promise.all([
-        emptyGameConnectPlayer,
-        emptyLog,
-        ...saveHomePlayers,
-        ...saveAwayPlayers,
-        ...saveLogs,
-      ]);
+        await this.logRepository.saveLog(logInstance, queryRunner);
+      }
 
       await queryRunner.commitTransaction();
       return { gameId };

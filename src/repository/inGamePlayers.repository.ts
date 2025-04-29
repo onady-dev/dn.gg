@@ -1,11 +1,11 @@
 import { InjectRepository } from '@nestjs/typeorm';
-import { InGamePlayers } from 'src/entities/InGamePlayers.entity';
+import { InGamePlayer } from 'src/entities/InGamePlayer.entity';
 import { QueryRunner, Repository } from 'typeorm';
 
-export class InGamePlayersRepository extends Repository<InGamePlayers> {
+export class InGamePlayersRepository extends Repository<InGamePlayer> {
   constructor(
-    @InjectRepository(InGamePlayers)
-    private inGamePlayersRepository: Repository<InGamePlayers>,
+    @InjectRepository(InGamePlayer)
+    private inGamePlayersRepository: Repository<InGamePlayer>,
   ) {
     super(
       inGamePlayersRepository.target,
@@ -18,7 +18,7 @@ export class InGamePlayersRepository extends Repository<InGamePlayers> {
     groupId: number,
     gameId: number,
     team: string,
-  ): Promise<InGamePlayers[] | null> {
+  ): Promise<InGamePlayer[] | null> {
     return this.inGamePlayersRepository.find({
       where: {
         groupId,
@@ -34,14 +34,14 @@ export class InGamePlayersRepository extends Repository<InGamePlayers> {
     gameId: number,
     queryRunner: QueryRunner,
   ): Promise<void> {
-    await queryRunner.manager.delete(InGamePlayers, { groupId, gameId });
+    await queryRunner.manager.delete(InGamePlayer, { groupId, gameId });
   }
 
   async saveInGamePlayers(
-    inGamePlayers: InGamePlayers,
+    inGamePlayers: InGamePlayer,
     queryRunner: QueryRunner,
-  ): Promise<InGamePlayers> {
-    return queryRunner.manager.save(InGamePlayers, inGamePlayers);
+  ): Promise<InGamePlayer> {
+    return queryRunner.manager.save(InGamePlayer, inGamePlayers);
   }
 
   async getTotalGamesPlayed(id: number) {

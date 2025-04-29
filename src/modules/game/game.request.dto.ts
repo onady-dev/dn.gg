@@ -33,7 +33,10 @@ export class PostGameAndLogsRequestDto {
   awayPlayers: AwayPlayer[];
   @IsOptional()
   @IsArray()
-  logs: Log[];
+  logs: Log[] = [];
+  @IsOptional()
+  @IsString()
+  status: string;
 }
 
 class HomePlayer {

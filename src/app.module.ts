@@ -30,7 +30,7 @@ const { combine, timestamp, printf, colorize } = winston.format;
       entities: ['dist/entities/*.entity.js'],
       autoLoadEntities: true,
       synchronize: true,
-      logging: true,
+      logging: false,
     }),
     WinstonModule.forRoot({
       transports: [

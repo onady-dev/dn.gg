@@ -1,5 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from "typeorm";
-import { InGamePlayers } from "./InGamePlayers.entity";
+import { InGamePlayer } from "./InGamePlayer.entity";
 import { Log } from "./Log.entity";
 @Entity()
 @Unique(["groupId", "name"])
@@ -13,8 +13,8 @@ export class Player {
   @Column('varchar', { length: 20, nullable: true })
   backnumber: string;
   
-  @OneToMany(() => InGamePlayers, (inGamePlayers) => inGamePlayers.player)
-  inGamePlayers: InGamePlayers[];
+  @OneToMany(() => InGamePlayer, (inGamePlayers) => inGamePlayers.player)
+  inGamePlayers: InGamePlayer[];
   @OneToMany(() => Log, (log) => log.player)
   logs: Log[];
 }

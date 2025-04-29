@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   Query,
   ValidationPipe,
@@ -23,10 +24,10 @@ export class GameController {
     return this.gameService.getGames(groupId);
   }
 
-  //   @Post()
-  //   async saveGame(@Body(ValidationPipe) dto: PostGameRequestDto) {
-  //     return this.gameService.saveGame(dto);
-  //   }
+  @Patch(':id')
+  async updateGameStatus(@Param('id') id: number, @Body('status') status: string) {
+    return this.gameService.updateGameStatus(id, status);
+  }
 
   @Delete(':id')
   async deleteGame(@Param('id') id: number) {

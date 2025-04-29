@@ -9,7 +9,7 @@ import { GameService } from "./game.service";
 import { GameController } from "./game.controller";
 import { Logitem } from "src/entities/Logitem.entity";
 import { Log } from "src/entities/Log.entity";
-import { InGamePlayers } from "src/entities/InGamePlayers.entity";
+import { InGamePlayer } from "src/entities/InGamePlayer.entity";
 import { InGamePlayersRepository } from "src/repository/inGamePlayers.repository";
 import { LogRepository } from "src/repository/log.repository";
 
@@ -24,7 +24,7 @@ import { LogRepository } from "src/repository/log.repository";
         Logitem,
         Player,
         Group,
-        InGamePlayers,
+        InGamePlayer,
         Log,
     ]),
   ],

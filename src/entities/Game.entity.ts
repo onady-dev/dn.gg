@@ -1,5 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { InGamePlayers } from "./InGamePlayers.entity";
+import { InGamePlayer } from "./InGamePlayer.entity";
 import { Log } from "./Log.entity";
 @Entity()
 export class Game {
@@ -11,9 +11,15 @@ export class Game {
   date: Date;
   @Column('varchar', { length: 20 })
   name: string;
-  
-  @OneToMany(() => InGamePlayers, (inGamePlayers) => inGamePlayers.game)
-  inGamePlayers: InGamePlayers[];
+  @Column({ 
+    type: 'varchar', 
+    default: 'IN_PROGRESS',
+    enum: ['IN_PROGRESS', 'FINISHED'] 
+  })
+  status: 'IN_PROGRESS' | 'FINISHED';
+
+  @OneToMany(() => InGamePlayer, (inGamePlayers) => inGamePlayers.game)
+  inGamePlayers: InGamePlayer[];
   @OneToMany(() => Log, (log) => log.game)
   logs: Log[];
 }

@@ -33,4 +33,8 @@ export class GameRepository extends Repository<Game>{
     async deleteGame(id: number) {
         return this.gameRepository.delete(id);
     }
+
+    async updateGameStatus(id: number, status: string) {
+        return this.gameRepository.update(id, { status: status as 'IN_PROGRESS' | 'FINISHED' });
+    }
 }

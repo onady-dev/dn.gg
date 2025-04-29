@@ -2,7 +2,7 @@ import { Column, Entity, ManyToOne } from "typeorm";
 import { Game } from "./Game.entity";
 import { Player } from "./Player.entity";
 @Entity()
-export class InGamePlayers {
+export class InGamePlayer {
   @Column('int', {
     primary: true,
   })

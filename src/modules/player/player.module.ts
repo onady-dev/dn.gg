@@ -8,14 +8,14 @@ import { PlayerService } from './player.service';
 import { PlayerController } from './player.controller';
 import { PlayerRepository } from 'src/repository/player.repository';
 import { InGamePlayersRepository } from 'src/repository/inGamePlayers.repository';
-import { InGamePlayers } from 'src/entities/InGamePlayers.entity';
+import { InGamePlayer } from 'src/entities/InGamePlayer.entity';
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
     }),
-    TypeOrmModule.forFeature([Game, Player, Group, InGamePlayers]),
+    TypeOrmModule.forFeature([Game, Player, Group, InGamePlayer]),
   ],
   controllers: [PlayerController],
   providers: [PlayerService, PlayerRepository, InGamePlayersRepository],
