@@ -14,6 +14,10 @@ export class Log {
   playerId: number;
   @Column('int')
   logitemId: number;
+  @Column('int', { nullable: true })
+  sequence: number;
+  @Column('timestamp', { default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
   
   @ManyToOne(() => Game, (game) => game.logs)
   game: Game;

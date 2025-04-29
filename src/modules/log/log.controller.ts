@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Query, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Query, ValidationPipe } from '@nestjs/common';
 import { LogService } from './log.service';
 import { PostLogRequestDto } from './log.request.dto';
 
@@ -32,5 +32,18 @@ export class LogController {
   @Post()
   async createLog(@Body(ValidationPipe) log: PostLogRequestDto) {
     return this.logService.createLog(log);
+  }
+
+  @Delete('/game/:id/undo')
+  async undoLastLog(@Param('id') gameId: number) {
+    return this.logService.undoLastLog(gameId);
+  }
+
+  @Post('/game/:id/redo')
+  async redoLog(
+    @Param('id') gameId: number,
+    @Body('sequence') sequence: number,
+  ) {
+    return this.logService.redoLog(gameId, sequence);
   }
 }

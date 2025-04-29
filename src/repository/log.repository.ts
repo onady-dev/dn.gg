@@ -40,12 +40,11 @@ export class LogRepository extends Repository<Log> {
     });
   }
 
-  async findByPlayerId(playerId: number): Promise<Log[] | null> {
-    return this.logRepository.find({
+  async findByPlayerId(playerId: number): Promise<Log | null> {
+    return this.logRepository.findOne({
       where: {
         playerId,
       },
-      relations: ['logitem', 'player', 'game'],
     });
   }
 
@@ -55,6 +54,31 @@ export class LogRepository extends Repository<Log> {
         logitemId,
       },
     });
+  }
+
+  async findLastLogByGameId(gameId: number): Promise<Log | null> {
+    return this.logRepository.findOne({
+      where: {
+        gameId,
+      },
+      order: {
+        sequence: 'DESC',
+      },
+    });
+  }
+
+  async findLogByGameIdAndSequence(gameId: number, sequence: number): Promise<Log | null> {
+    return this.logRepository.findOne({
+      where: {
+        gameId,
+        sequence,
+      },
+      relations: ['logitem', 'player', 'game'],
+    });
+  }
+
+  async removeLog(id: number): Promise<void> {
+    await this.logRepository.delete(id);
   }
 
   async emptyLog(
