@@ -40,11 +40,12 @@ export class LogRepository extends Repository<Log> {
     });
   }
 
-  async findByPlayerId(playerId: number): Promise<Log | null> {
-    return this.logRepository.findOne({
+  async findByPlayerId(playerId: number): Promise<Log[] | null> {
+    return this.logRepository.find({
       where: {
         playerId,
       },
+      relations: ['logitem', 'player', 'game'],
     });
   }
 
