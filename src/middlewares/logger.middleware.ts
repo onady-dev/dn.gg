@@ -42,11 +42,19 @@ export class LoggerMiddleware implements NestMiddleware {
       };
 
       if (statusCode >= 500) {
-        this.logger.error('Server Error', logMessage);
+        this.logger.error(
+          `Server Error ${method} ${ip} ${originalUrl} ${statusCode} ${duration}ms`
+        );
       } else if (statusCode >= 400) {
-        this.logger.warn('Client Error', logMessage);
+        if (originalUrl !== '/') {
+          this.logger.warn(
+            `Client Error ${method} ${ip} ${originalUrl} ${statusCode} ${duration}ms`
+          );
+        }
       } else if (duration >= 5000) {
-        this.logger.warn('Slow Request', logMessage);
+        this.logger.warn(
+          `Slow Request ${method} ${ip} ${originalUrl} ${statusCode} ${duration}ms`
+        );
       } else {
         this.logger.log(
           `${method} ${ip} ${originalUrl} ${statusCode} ${duration}ms`,
