@@ -14,6 +14,7 @@ export class Game {
   @Column({ 
     type: 'varchar', 
     default: 'IN_PROGRESS',
+    comment: 'IN_PROGRESS | FINISHED',
     enum: ['IN_PROGRESS', 'FINISHED'] 
   })
   status: 'IN_PROGRESS' | 'FINISHED';
