@@ -45,19 +45,19 @@ export class HttpExceptionFilter implements ExceptionFilter {
       stack: exception instanceof Error ? exception.stack : undefined,
     };
 
-    // if (status >= 500) {
-    //   this.logger.error(
-    //     `${method} ${originalUrl} ${status} ${message}`,
-    //     errorLog,
-    //   );
-    // } else if (status >= 400) {
-    //   if (originalUrl !== '/log') {
-    //     this.logger.warn(
-    //       `${method} ${originalUrl} ${status} ${message}`,
-    //       errorLog,
-    //     );
-    //   }
-    // }
+    if (status >= 500) {
+      this.logger.error(
+        `[Server Error] ${method} ${originalUrl} ${status} ${message}\n${exception instanceof Error ? exception.stack : ''}`,
+        errorLog,
+      );
+    } else if (status >= 400) {
+      if (originalUrl !== '/log') {
+        this.logger.warn(
+          `[Client Error] ${method} ${originalUrl} ${status} ${message}`,
+          errorLog,
+        );
+      }
+    }
 
     response.status(status).json(getResponse);
   }

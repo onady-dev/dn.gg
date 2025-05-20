@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Post, Query, ValidationPipe } from '@nestjs/common';
 import { LogService } from './log.service';
-import { PostLogRequestDto } from './log.request.dto';
+import { GetLogByDailyRequestDto, PostLogRequestDto } from './log.request.dto';
+import { Player } from 'src/entities/Player.entity';
 
 @Controller('log')
 export class LogController {
@@ -9,6 +10,11 @@ export class LogController {
   @Get()
   async getLogByGroupId(@Query('groupId') groupId: number) {
     return this.logService.getLogByGroupId(groupId);
+  }
+
+  @Get('/daily')
+  async getLogByDaily(@Query(ValidationPipe) dto: GetLogByDailyRequestDto) {
+    return await this.logService.getLogByDaily(dto.date);
   }
 
   @Get('/game/:id')

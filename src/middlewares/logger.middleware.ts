@@ -42,22 +42,22 @@ export class LoggerMiddleware implements NestMiddleware {
       };
 
       if (statusCode >= 500) {
-        this.logger.error(
-          `Server Error ${method} ${ip} ${originalUrl} ${statusCode} ${duration}ms`
-        );
+        // this.logger.error(
+        //   `Server Error ${method} ${ip} ${originalUrl} ${statusCode} ${duration}ms`
+        // );
       } else if (statusCode >= 400) {
-        if (originalUrl !== '/') {
-          this.logger.warn(
-            `Client Error ${method} ${ip} ${originalUrl} ${statusCode} ${duration}ms`
-          );
-        }
+        // if (originalUrl !== '/') {
+        //   this.logger.warn(
+        //     `Client Error ${method} ${ip} ${originalUrl} ${statusCode} ${duration}ms`
+        //   );
+        // }
       } else if (duration >= 5000) {
         this.logger.warn(
-          `Slow Request ${method} ${ip} ${originalUrl} ${statusCode} ${duration}ms`
+          `Slow Request ${method} ${ip} ${originalUrl} ${statusCode} ${duration}ms ${body}`
         );
       } else {
         this.logger.log(
-          `${method} ${ip} ${originalUrl} ${statusCode} ${duration}ms`,
+          `${method} ${ip} ${originalUrl} ${statusCode} ${duration}ms ${body}`
         );
       }
     });

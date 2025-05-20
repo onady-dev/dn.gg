@@ -3,6 +3,7 @@ import { LogRepository } from 'src/repository/log.repository';
 import { PostLogRequestDto } from './log.request.dto';
 import { plainToInstance } from 'class-transformer';
 import { Log } from 'src/entities/Log.entity';
+import { Player } from './types';
 
 @Injectable()
 export class LogService {
@@ -10,6 +11,27 @@ export class LogService {
 
   async getLogByGroupId(groupId: number) {
     return this.logRepository.findByGroupId(groupId);
+  }
+
+  async getLogByDaily(dateString: string) {
+    const date = new Date(dateString);
+    const playerMap = new Map<number, Player>();
+    const logs = await this.logRepository.findByDaily(date);
+    logs?.forEach((log: any) => {
+      const getPlayerMap = playerMap.get(log.playerId);
+      playerMap.set(log.playerId, {
+        id: log.playerId,
+        name: log.player.name,
+        backnumber: Number(log.player.backnumber),
+        totalScore: (getPlayerMap?.totalScore || 0) + log.logitem.value,
+        logItem: { 
+          ...getPlayerMap?.logItem, [log.logitemId]: {...log.logitem, 
+          count: (getPlayerMap?.logItem[log.logitemId]?.count || 0) + 1, 
+          value: (getPlayerMap?.logItem[log.logitemId]?.value || 0) + log.logitem.value} 
+        },
+      });
+    });
+    return Array.from(playerMap.values());
   }
 
   async getLogByGameId(gameId: number) {

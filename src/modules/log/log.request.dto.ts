@@ -14,3 +14,9 @@ export class PostLogRequestDto {
     @IsNumber()
     logitemId: number;
 }
+
+export class GetLogByDailyRequestDto {
+    @IsNotEmpty()
+    @IsString()
+    date: string;
+}

@@ -1,6 +1,6 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Log } from 'src/entities/Log.entity';
-import { QueryRunner, Repository } from 'typeorm';
+import { Like, QueryRunner, Repository, Between } from 'typeorm';
 
 export class LogRepository extends Repository<Log> {
   constructor(
@@ -27,6 +27,20 @@ export class LogRepository extends Repository<Log> {
     return this.logRepository.find({
       where: {
         groupId,
+      },
+      relations: ['logitem', 'player'],
+    });
+  }
+
+  async findByDaily(date: Date): Promise<Log[] | null> {
+    const startOfDay = new Date(date);
+    startOfDay.setHours(0, 0, 0, 0);
+    
+    const endOfDay = new Date(date);
+    endOfDay.setHours(23, 59, 59, 999);
+    return this.logRepository.find({
+      where: {
+        createdAt: Between(startOfDay, endOfDay),
       },
       relations: ['logitem', 'player'],
     });
