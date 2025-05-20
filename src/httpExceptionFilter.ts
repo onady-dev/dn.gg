@@ -51,7 +51,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
         errorLog,
       );
     } else if (status >= 400) {
-      if (originalUrl !== '/log') {
+      if (originalUrl !== '/') {
         this.logger.warn(
           `[Client Error] ${method} ${originalUrl} ${status} ${message}`,
           errorLog,
