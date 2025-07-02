@@ -10,6 +10,7 @@ import { PlayerModule } from './modules/player/player.module';
 import { APP_FILTER } from '@nestjs/core';
 import { HttpExceptionFilter } from './httpExceptionFilter';
 import { LogModule } from './modules/log/log.module';
+import { UserModule } from './modules/user/user.module';
 import * as winston from 'winston';
 
 const { combine, timestamp, printf, colorize } = winston.format;
@@ -59,6 +60,7 @@ const { combine, timestamp, printf, colorize } = winston.format;
     LogitemModule,
     PlayerModule,
     LogModule,
+    UserModule,
   ],
   controllers: [],
   providers: [

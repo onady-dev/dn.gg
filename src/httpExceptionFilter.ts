@@ -6,6 +6,7 @@ import {
   Inject,
   LoggerService,
   HttpStatus,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
@@ -22,15 +23,30 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
     const { method, originalUrl, body, headers } = request;
-    const status =
-      exception instanceof HttpException
-        ? exception.getStatus()
-        : HttpStatus.INTERNAL_SERVER_ERROR;
-    const getResponse =
-      exception instanceof HttpException
-        ? exception.getResponse()
-        : HttpStatus.INTERNAL_SERVER_ERROR;
-    const message = getResponse['message'];
+
+    let status = HttpStatus.INTERNAL_SERVER_ERROR;
+    let responseBody: any = { message: 'Internal server error' };
+    if (
+      typeof exception === 'object' &&
+      exception !== null &&
+      'getStatus' in exception &&
+      typeof exception['getStatus'] === 'function'
+    ) {
+      status = exception['getStatus']();
+      const res = exception['getResponse']();
+      if (typeof res === 'object' && res !== null) {
+        responseBody = res;
+      } else {
+        responseBody = { message: res };
+      }
+    } else if (exception instanceof Error) {
+      responseBody = { message: exception.message };
+    }
+
+    const message =
+      typeof responseBody === 'object' && responseBody !== null
+        ? responseBody['message']
+        : responseBody;
 
     const errorLog = {
       method,
@@ -59,6 +75,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
       }
     }
 
-    response.status(status).json(getResponse);
+    response.status(status).json(
+      typeof responseBody === 'object' && responseBody !== null
+        ? responseBody
+        : { message: String(responseBody) }
+    );
   }
 }

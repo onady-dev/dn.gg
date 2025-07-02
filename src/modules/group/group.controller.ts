@@ -6,9 +6,11 @@ import {
   Post,
   Query,
   ValidationPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { GroupService } from './group.service';
 import { PostGroupRequestDto } from './group.request.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('group')
 export class GroupController {
@@ -25,6 +27,7 @@ export class GroupController {
   }
 
   @Post()
+  @UseGuards(AuthGuard('jwt'))
   async createGroup(@Body(ValidationPipe) group: PostGroupRequestDto) {
     return this.groupService.createGroup(group);
   }

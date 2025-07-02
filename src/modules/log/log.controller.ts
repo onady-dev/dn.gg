@@ -1,7 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Post, Query, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Query, ValidationPipe, UseGuards } from '@nestjs/common';
 import { LogService } from './log.service';
 import { GetLogByDailyRequestDto, PostLogRequestDto } from './log.request.dto';
 import { Player } from 'src/entities/Player.entity';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('log')
 export class LogController {
@@ -36,16 +37,19 @@ export class LogController {
   }
 
   @Post()
+  @UseGuards(AuthGuard('jwt'))
   async createLog(@Body(ValidationPipe) log: PostLogRequestDto) {
     return this.logService.createLog(log);
   }
 
   @Delete('/game/:id/undo')
+  @UseGuards(AuthGuard('jwt'))
   async undoLastLog(@Param('id') gameId: number) {
     return this.logService.undoLastLog(gameId);
   }
 
   @Post('/game/:id/redo')
+  @UseGuards(AuthGuard('jwt'))
   async redoLog(
     @Param('id') gameId: number,
     @Body('sequence') sequence: number,

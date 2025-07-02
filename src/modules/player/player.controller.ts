@@ -9,9 +9,11 @@ import {
   Put,
   Query,
   ValidationPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { PlayerService } from './player.service';
 import { PostPlayerRequestDto } from './player.request.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('player')
 export class PlayerController {
@@ -28,6 +30,7 @@ export class PlayerController {
   }
 
   @Post()
+  @UseGuards(AuthGuard('jwt'))
   async createPlayer(@Body(ValidationPipe) dto: PostPlayerRequestDto) {
     return this.playerService.createPlayer(dto).catch((error) => {
       if (error.driverError.code === '23505') {
@@ -38,6 +41,7 @@ export class PlayerController {
   }
 
   @Put(':id')
+  @UseGuards(AuthGuard('jwt'))
   async updatePlayer(
     @Param('id') id: number,
     @Body(ValidationPipe) dto: PostPlayerRequestDto,
@@ -46,6 +50,7 @@ export class PlayerController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard('jwt'))
   async deletePlayer(
     @Param('id') id: number,
     @Query('groupId') groupId: number,
