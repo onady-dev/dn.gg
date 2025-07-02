@@ -7,6 +7,7 @@ import { Log } from "./entities/Log.entity";
 import { Logitem } from "./entities/Logitem.entity";
 import { Player } from "./entities/Player.entity";
 import { AddSequenceToLog1709123456789 } from "./migrations/1709123456789-AddSequenceToLog";
+import { User } from "./entities/User.entity";
 
 config();
 
@@ -19,7 +20,7 @@ export const AppDataSource = new DataSource({
     database: process.env.DB_DATABASE,
     synchronize: false,
     logging: true,
-    entities: [Game, Group, InGamePlayer, Log, Logitem, Player],
+    entities: [Game, Group, InGamePlayer, Log, Logitem, Player, User],
     migrations: [AddSequenceToLog1709123456789],
     subscribers: [],
 }); 

@@ -12,10 +12,6 @@ import { Log } from "src/entities/Log.entity";
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-        isGlobal: true,
-        envFilePath: ".env",
-    }),
     TypeOrmModule.forFeature([
         Game,
         Logitem,

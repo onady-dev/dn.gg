@@ -8,7 +8,7 @@ export class User {
   id: number;
   @Column('int')
   groupId: number;
-  @Column('varchar')
+  @Column('varchar', { unique: true })
   email: string;
   @Column('varchar')
   password: string;

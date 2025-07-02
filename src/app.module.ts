@@ -14,7 +14,6 @@ import { UserModule } from './modules/user/user.module';
 import * as winston from 'winston';
 
 const { combine, timestamp, printf, colorize } = winston.format;
-
 @Module({
   imports: [
     ConfigModule.forRoot({

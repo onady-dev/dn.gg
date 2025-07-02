@@ -11,10 +11,6 @@ import { InGamePlayersRepository } from 'src/repository/inGamePlayers.repository
 import { InGamePlayer } from 'src/entities/InGamePlayer.entity';
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: '.env',
-    }),
     TypeOrmModule.forFeature([Game, Player, Group, InGamePlayer]),
   ],
   controllers: [PlayerController],

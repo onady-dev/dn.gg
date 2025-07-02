@@ -15,10 +15,6 @@ import { LogRepository } from "src/repository/log.repository";
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-        isGlobal: true,
-        envFilePath: ".env",
-    }),
     TypeOrmModule.forFeature([
         Game,
         Logitem,

@@ -8,7 +8,6 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  @UseGuards(AuthGuard('jwt'))
   async createUser(@Body(ValidationPipe) dto: CreateUserDto) {
     return this.userService.createUser(dto);
   }

@@ -8,18 +8,18 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 import { GroupRepository } from 'src/repository/group.repository';
 import { Group } from 'src/entities/Group.entity';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-        isGlobal: true,
-        envFilePath: ".env",
-    }),
-      JwtModule.register({
-        secret: process.env.JWT_SECRET,
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'),
         signOptions: { expiresIn: '1d' },
       }),
+    }),
     TypeOrmModule.forFeature([User, Group]),
   ],
   controllers: [UserController],

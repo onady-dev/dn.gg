@@ -11,10 +11,6 @@ import { GroupRepository } from "src/repository/group.repository";
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-        isGlobal: true,
-        envFilePath: ".env",
-    }),
     TypeOrmModule.forFeature([
         Game,
         Logitem,
