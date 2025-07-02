@@ -14,6 +14,8 @@ export class GameRepository extends Repository<Game>{
     async findByGroupId(groupId: number): Promise<Game[] | null> {
         return this.gameRepository.createQueryBuilder('game')
             .where('game."groupId" = :groupId', { groupId })
+            .andWhere('game."status" != :status', { status: 'DELETED' })
+            .orderBy('game."id"', 'DESC')
             .getMany();
     }
 
@@ -31,7 +33,7 @@ export class GameRepository extends Repository<Game>{
     }
 
     async deleteGame(id: number) {
-        return this.gameRepository.delete(id);
+        return this.gameRepository.update(id, { status: 'DELETED' });
     }
 
     async updateGameStatus(id: number, status: string) {

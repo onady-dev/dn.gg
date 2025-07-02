@@ -25,7 +25,7 @@ export class GameService {
     const games: Game[] | null =
       await this.gameRepository.findByGroupId(groupId);
     if (!games) return [];
-    const gameInfo = games.map(async (game: Game) => {
+    const gameInfo = games.sort((a, b) => Number(b.id) - Number(a.id)).map(async (game: Game) => {
       const homePlayers = await this.inGamePlayersRepository.findPlayers(
         groupId,
         game.id,
@@ -80,8 +80,8 @@ export class GameService {
     };
   }
 
-  async deleteGame(id: number) {
-    return this.gameRepository.deleteGame(id);
+  async deleteGame(id: number, groupId: number) {
+      return await this.gameRepository.deleteGame(id);
   }
 
   async saveGameAndLogs(dto: PostGameAndLogsRequestDto) {

@@ -35,8 +35,8 @@ export class GameController {
   }
 
   @Delete(':id')
-  async deleteGame(@Param('id') id: number) {
-    return this.gameService.deleteGame(id);
+  async deleteGame(@Param('id') id: number, @Query('groupId') groupId: number) {
+    return this.gameService.deleteGame(id, groupId);
   }
 
   @Post()
