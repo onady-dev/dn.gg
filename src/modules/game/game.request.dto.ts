@@ -24,7 +24,10 @@ export class PostGameAndLogsRequestDto {
   groupId: number;
   @IsNotEmpty()
   @IsString()
-  name: string;
+  homeTeamName: string;
+  @IsNotEmpty()
+  @IsString()
+  awayTeamName: string;
   @IsNotEmpty()
   @IsArray()
   homePlayers: HomePlayer[];

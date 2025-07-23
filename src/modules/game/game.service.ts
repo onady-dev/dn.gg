@@ -40,7 +40,8 @@ export class GameService {
       return {
         id: game.id,
         date: game.date,
-        name: game.name,
+        homeTeamName: game.homeTeamName,
+        awayTeamName: game.awayTeamName,
         homePlayers: homePlayers?.map((player) => ({
           id: player.playerId,
           name: player.player.name,
@@ -72,7 +73,8 @@ export class GameService {
       groupId: game.groupId,
       id: game.id,
       date: game.date,
-      name: game.name,
+      homeTeamName: game.homeTeamName,
+      awayTeamName: game.awayTeamName,
       homePlayers: game.inGamePlayers.filter(player => player.team === 'home').map(player => player.player),
       awayPlayers: game.inGamePlayers.filter(player => player.team === 'away').map(player => player.player),
       logs: game.logs,
@@ -89,12 +91,13 @@ export class GameService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      const { id, groupId, homePlayers, awayPlayers, name, logs } = dto;
+      const { id, groupId, homePlayers, awayPlayers, homeTeamName, awayTeamName, logs } = dto;
       const gameInstance = plainToInstance(Game, {
         id,
         groupId,
         date: new Date(),
-        name,
+        homeTeamName,
+        awayTeamName,
       });
       
       // 게임 저장

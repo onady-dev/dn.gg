@@ -9,8 +9,10 @@ export class Game {
   groupId: number;
   @Column('date')
   date: Date;
-  @Column('varchar', { length: 20 })
-  name: string;
+  @Column('varchar', { length: 20, nullable: true })
+  homeTeamName: string;
+  @Column('varchar', { length: 20, nullable: true })
+  awayTeamName: string;
   @Column({ 
     type: 'varchar', 
     default: 'IN_PROGRESS',
