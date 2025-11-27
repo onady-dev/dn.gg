@@ -12,7 +12,7 @@ async function bootstrap() {
   app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
 
   app.enableCors({
-    origin: ['https://dngg.shop', 'http://localhost:3011', 'http://192.168.0.6:3011'],
+    origin: ['http://3.34.147.230:3000', 'http://localhost:3011', 'http://192.168.0.6:3011'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
     credentials: true,
     allowedHeaders: [
